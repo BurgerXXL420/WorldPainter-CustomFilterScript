@@ -1,6 +1,6 @@
 // This script extends the functionality of the WorldPainter API by enabling more flexible global operations. The standard WorldPainter API lacks the capability to combine multiple filters, such as "only on Sand" and "only on Water." This script addresses that limitation by allowing more complex and customizable operations for tedious global tasks.
 
-// The first section of the script (up to line 420) defines the objects and methods required to perform these enhanced operations. Following that, several examples are provided to demonstrate usage. The syntax is designed to be as close to the original WorldPainter API as possible, ensuring ease of adoption for users familiar with the standard API.
+// The first section of the script (up to line 441) defines the objects and methods required to perform these enhanced operations. Following that, several examples are provided to demonstrate usage. The syntax is designed to be as close to the original WorldPainter API as possible, ensuring ease of adoption for users familiar with the standard API.
 
 
 // -------------------------------------------------------------------- //
@@ -62,6 +62,7 @@ var setLayer = {
     belowLevelFilter: null,
     aboveDegreesFilter: null,
     belowDegreesFilter: null,
+    withProbabilityFilter: 1,
 
     // Methods to set filters
     layerName: function(arg) {
@@ -108,6 +109,10 @@ var setLayer = {
         this.belowDegreesFilter = degreesToSlope(arg);
         return this;
     },
+    withProbability: function(arg){
+        this.withProbabilityFilter = arg;
+        return this;
+    },
 
     // Method to set the layer based on filters
     go: function(){
@@ -131,7 +136,8 @@ var setLayer = {
                 var slope = dimension.getSlope(x,y);
 
                     // Check all conditions set by the user
-                    if ((isEmpty_onlyOnTerrainFilter || isTerrainAt(this.onlyOnTerrainFilter, x, y)) 
+                    if ((Math.random() <= this.withProbabilityFilter)
+                        && (isEmpty_onlyOnTerrainFilter || isTerrainAt(this.onlyOnTerrainFilter, x, y)) 
                         && !isTerrainAt(this.exceptOnTerrainFilter, x, y) 
                         && (isEmpty_onlyOnLayerFilter || isLayerAt(this.onlyOnLayerFilter, x, y)) 
                         && !isLayerAt(this.exceptOnLayerFilter, x, y)
@@ -159,6 +165,7 @@ var setLayer = {
         this.belowLevelFilter = null;
         this.aboveDegreesFilter = null;
         this.belowDegreesFilter = null;
+        this.withProbabilityFilter = 1;
 
         print("Execution complete.");
         print("For updates and support, visit: https://github.com/BurgerXXL420/WorldPainter-CustomFilterScript.");
@@ -188,6 +195,7 @@ var removeLayer = {
     belowLevelFilter: null,
     aboveDegreesFilter: null,
     belowDegreesFilter: null,
+    withProbabilityFilter: 1,
 
     // Methods to set filters
     layerName: function(arg) {
@@ -234,6 +242,10 @@ var removeLayer = {
         this.belowDegreesFilter = degreesToSlope(arg);
         return this;
     },
+    withProbability: function(arg){
+        this.withProbabilityFilter = arg;
+        return this;
+    },
 
     // Method to set the layer based on filters
     go: function(){
@@ -257,7 +269,8 @@ var removeLayer = {
                 var slope = dimension.getSlope(x,y);
 
                     // Check all conditions set by the user
-                    if ((isEmpty_onlyOnTerrainFilter || isTerrainAt(this.onlyOnTerrainFilter, x, y)) 
+                    if ((Math.random() <= this.withProbabilityFilter)
+                        && (isEmpty_onlyOnTerrainFilter || isTerrainAt(this.onlyOnTerrainFilter, x, y)) 
                         && !isTerrainAt(this.exceptOnTerrainFilter, x, y) 
                         && (isEmpty_onlyOnLayerFilter || isLayerAt(this.onlyOnLayerFilter, x, y)) 
                         && !isLayerAt(this.exceptOnLayerFilter, x, y)
@@ -285,6 +298,7 @@ var removeLayer = {
         this.belowLevelFilter = null;
         this.aboveDegreesFilter = null;
         this.belowDegreesFilter = null;
+        this.withProbabilityFilter = 1;
 
         print("Execution complete.");
         print("For updates and support, visit: https://github.com/BurgerXXL420/WorldPainter-CustomFilterScript.");
@@ -314,6 +328,7 @@ var setTerrain = {
     belowLevelFilter: null,
     aboveDegreesFilter: null,
     belowDegreesFilter: null,
+    withProbabilityFilter: 1,
 
     // Methods to set filters
     terrainName: function(arg) {
@@ -360,6 +375,10 @@ var setTerrain = {
         this.belowDegreesFilter = degreesToSlope(arg);
         return this;
     },
+    withProbability: function(arg){
+        this.withProbabilityFilter = arg;
+        return this;
+    },
 
     // Method to set the layer based on filters
     go: function(){
@@ -383,7 +402,8 @@ var setTerrain = {
                 var slope = dimension.getSlope(x,y);
 
                     // Check all conditions set by the user
-                    if ((isEmpty_onlyOnTerrainFilter || isTerrainAt(this.onlyOnTerrainFilter, x, y)) 
+                    if ((Math.random() <= this.withProbabilityFilter)
+                        && (isEmpty_onlyOnTerrainFilter || isTerrainAt(this.onlyOnTerrainFilter, x, y)) 
                         && !isTerrainAt(this.exceptOnTerrainFilter, x, y) 
                         && (isEmpty_onlyOnLayerFilter || isLayerAt(this.onlyOnLayerFilter, x, y)) 
                         && !isLayerAt(this.exceptOnLayerFilter, x, y)
@@ -411,6 +431,7 @@ var setTerrain = {
         this.belowLevelFilter = null;
         this.aboveDegreesFilter = null;
         this.belowDegreesFilter = null;
+        this.withProbabilityFilter = 1;
 
         print("Execution complete.");
         print("For updates and support, visit: https://github.com/BurgerXXL420/WorldPainter-CustomFilterScript.");
@@ -439,6 +460,7 @@ setLayer.layerName(my_layer0) // Required. Load my_layer0 first. See WorldPainte
         .exceptOnTerrain(my_terrain1, my_terrain2) // Optional. Exclude the specified terrains from the operation.
         .exceptOnLayer(my_layer1, my_layer2) // Optional. Exclude the specified layers from the operation.
         .exceptOnWater() // Optional. Exclude flooded areas from the operation.
+        .withProbability(0.5) // Optional. Apply the operation with the specified probability (0.5 means a 50% chance).
         .go(); // Required. Executes the layer placement under the specified conditions.
 
 
@@ -454,6 +476,7 @@ removeLayer.layerName(my_layer0) // Required. Load my_layer0 first. See WorldPai
         .exceptOnTerrain(my_terrain1, my_terrain2) // Optional. Exclude the specified terrains from layer removal.
         .exceptOnLayer(my_layer1, my_layer2) // Optional. Exclude the specified layers from layer removal.
         .exceptOnWater() // Optional. Exclude flooded areas from layer removal.
+        .withProbability(0.5) // Optional. Apply the operation with the specified probability (0.5 means a 50% chance).
         .go(); // Required. Executes the removal of the layer under the specified conditions.
 
 
@@ -469,6 +492,7 @@ setTerrain.terrainName(my_terrain0) // Required. Load my_terrain0 first. See Wor
         .exceptOnTerrain(my_terrain1, my_terrain2) // Optional. Exclude the specified terrains from applying the terrain.
         .exceptOnLayer(my_layer1, my_layer2) // Optional. Exclude the specified layers from applying the terrain.
         .exceptOnWater() // Optional. Exclude flooded areas from applying the terrain.
+        .withProbability(0.5) // Optional. Apply the operation with the specified probability (0.5 means a 50% chance).
         .go(); // Required. Executes the application of the terrain under the specified conditions.
 
 // Note: The order of the methods does not matter as long as .go() is called last.
